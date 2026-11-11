@@ -1,61 +1,65 @@
 # Agent Harness Playbook
 
-> A practitioner's guide to designing, choosing, and operating the runtime scaffolding around AI agents — the part everyone calls "the harness."
-
-Most agent repos teach you how to *prompt* a model. This one is about everything else: the loop, the tools, the permissions, the memory, the cost, and the failure modes. **The harness is where agents succeed or fail in production** — and almost nobody writes down the decisions. This repo does.
+A practitioner's guide to the runtime layer around AI agents — the loop, the tools, the permissions, the memory, the cost. The part that decides whether an agent works in production or only in a demo.
 
 ---
 
-## Why this repo exists
+## What this is
 
-Agent harnesses are being reinvented every week. Teams ship a demo, hit production, and discover:
+Every agent has a harness: the code that runs the model in a loop, gives it tools, gates its actions, and decides when to stop. This repo is a collection of **decisions, trade-offs, and field notes** about building that layer well.
 
-- The model was never the bottleneck — the **tool loop** was.
-- Permissions were bolted on last, and now every new tool is a security review.
-- Costs exploded because nobody measured **test-time compute vs. success rate**.
-- A 100-line harness outperformed a 10,000-line framework for their use case — but they found out too late.
+It is not a framework. It is not a tutorial. It is the thinking you do *before* and *while* you build one.
 
-There is plenty of *code*. There is very little *judgment*. **This playbook is the decision layer**: trade-offs, selection matrices, anti-patterns, and migration paths — written for people who are about to build or replace a harness.
+---
+
+## Why it exists
+
+Most agent failures are not model failures. They are harness failures:
+
+- The tool loop retries forever or gives up too early.
+- Permissions are added after launch, so every new tool becomes a security review.
+- Nobody measured cost per successful task until the bill arrived.
+- A small, well-designed harness outperformed a large framework — but the team found out months in.
+
+These lessons are learned repeatedly and written down rarely. This repo writes them down.
 
 ---
 
 ## What's inside
 
-| Section | What you get | Read this if... |
-|---|---|---|
-| [`01-selection/`](./01-selection) | Decision matrix: minimal harness vs. framework vs. vendor SDK | You're choosing an architecture |
-| [`02-architecture/`](./02-architecture) | Subsystem-by-subsystem breakdown (engine, tools, permissions, memory, hooks, MCP) | You're designing your own |
-| [`03-permissions/`](./03-permissions) | Multi-tier permission models, path-level ACLs, human-in-the-loop approval | You're shipping to real users |
-| [`04-cost-performance/`](./04-cost-performance) | Test-time compute vs. success rate, token break-even analysis | Your bill is growing |
-| [`05-migration/`](./05-migration) | Moving from a hand-rolled loop to a framework (and back) | You've outgrown your harness |
-| [`06-anti-patterns/`](./06-anti-patterns) | What we tried, what broke, and why | You want to avoid our mistakes |
+| Folder | Contents |
+|---|---|
+| `01-selection/` | How to choose between a minimal harness, a framework, and a vendor SDK — with a decision matrix |
+| `02-architecture/` | Subsystem breakdown: engine, tools, permissions, memory, hooks, MCP |
+| `03-permissions/` | Permission tiers, path-level access control, human-in-the-loop approval |
+| `04-cost-performance/` | Test-time compute vs. success rate, token cost break-even |
+| `05-migration/` | Moving between hand-rolled loops and frameworks, in both directions |
+| `06-anti-patterns/` | Approaches that failed, and why |
 
-Each section is **opinionated**, **short**, and ends with a **decision checklist** — not a link dump.
+Each document is short, opinionated, and ends with a **decision checklist** you can act on.
 
 ---
 
-## Who this is for
+## Who it's for
 
-- Engineers building an agent product who need to pick a harness **this quarter**
+- Engineers choosing a harness architecture for a product shipping this quarter
 - Platform teams standardizing agent infrastructure across teams
-- Anyone who has read the framework docs and still doesn't know **which trade-off to make**
-
-**Not for you if** you want copy-paste code recipes — see [awesome-ai-agents](link) or a cookbook-style repo instead.
+- Anyone who has read the framework docs and still doesn't know which trade-off to make
 
 ---
 
 ## How to use it
 
-1. Start with [`01-selection/README.md`](./01-selection/README.md) — a 10-minute read that routes you to the right section.
-2. Skim the **decision checklists** at the end of each doc.
-3. Open an issue if your trade-off isn't covered — that's the most valuable contribution.
+1. Open `01-selection/README.md` — a short read that points you to the right section for your situation.
+2. Skim the decision checklist at the end of each document.
+3. If your situation isn't covered, open an issue. Field reports are the most valuable contribution.
 
 ---
 
 ## Contributing
 
-We want **field reports**, not links. If you've shipped a harness and hit a wall, write it up in `06-anti-patterns/`. See [CONTRIBUTING.md](./CONTRIBUTING.md).
+Contributions should be **field reports and trade-off analyses**, not link collections. If you've shipped a harness and hit a wall, write it up in `06-anti-patterns/`. See `CONTRIBUTING.md`.
 
 ## License
 
-[MIT](./LICENSE)
+MIT
